@@ -12,8 +12,16 @@ import {
 import { BsFillPlayFill } from 'react-icons/bs';
 import { AiOutlineClockCircle } from 'react-icons/ai';
 import { formatDate, formatTime } from '../lib/formatters';
+import { useStoreActions } from 'easy-peasy';
 
 const SongsTable = ({ songs }) => {
+  const playSongs = useStoreActions((store: any) => store.changeActiveSongs);
+  const setActiveSong = useStoreActions((store: any) => store.changeActiveSong);
+
+  const handlePlay = (activeSong?) => {
+    setActiveSong(activeSong || songs[0]);
+    playSongs(songs);
+  };
   return (
     <Box bg="transparent" color="white">
       <Box padding="10px" marginBottom="20px">
@@ -23,6 +31,7 @@ const SongsTable = ({ songs }) => {
             colorScheme="green"
             size="lg"
             isRound
+            onClick={() => handlePlay()}
             aria-label="play"
           />
         </Box>
@@ -40,8 +49,9 @@ const SongsTable = ({ songs }) => {
           <Tbody>
             {songs.map((song, index) => (
               <Tr
+                onClick={() => handlePlay(song)}
                 key={song.id}
-                cursor="cusrsor"
+                cursor="pointer"
                 sx={{
                   transition: '0.3s',
                   '&:hover': { bg: 'rgba(255,255,255,0.1)' },
